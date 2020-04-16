@@ -4,5 +4,6 @@
  * Use as you will, or start over. It's up to you.
  */
 //header('Content-Type: application/json');
-echo "#YOLO";
+$obj = json_decode($_POST["q"],false);
+echo "#YO ".$obj->searchString.$obj->searchString." LO";
 ?>
