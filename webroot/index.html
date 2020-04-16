@@ -4,10 +4,15 @@
     <meta charset="utf-8">
     <title>Countries Search</title>
     <link rel="stylesheet" href="/css/main.css">
+    <script src="js/app.js"></script>
   </head>
   <body>
-    <script src="/js/app.js"></script>
   	<h1>Country Search Template</h1>
   	<p>This is here to get you started.</p>
+    <form onsubmit="searchFunction()">
+      <label for="searchText">Country search string:</label>
+      <input type="text" id="searchText" name="searchText">
+      <input type="submit" value="Search">
+    </form>
   </body>
 </html>
