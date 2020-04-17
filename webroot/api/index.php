@@ -16,12 +16,6 @@ function nameSearch($url){
 	sortCountriesByPop($result);
 	return $result;
 }
-function codeSearch($url){
-	$result = file_get_contents($url);
-	$result=json_decode($result,true);
-	$coll = array($result);
-	return json_encode($coll);
-}
 function queryCountries($searchString,$mode=""){
 	$fields="fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages;";
 	if($searchString=="all"){
