@@ -4,27 +4,54 @@
  * Use as you will, or start over. It's up to you.
  */
 function popCmp($a,$b){
-	return $a->population < $b->population;
+	return $a["population"] < $b["population"];
 }
-function queryCountries($searchString){
-	$fields="?fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages;";
+function sortCountriesByPop(&$json){
+	$json=json_decode($json,true);
+	usort($json,"popCmp");
+	$json=json_encode($json);
+}
+function nameSearch($url){
+	$result = file_get_contents($url);
+	sortCountriesByPop($result);
+	return $result;
+}
+function codeSearch($url){
+	$result = file_get_contents($url);
+	$result=json_decode($result,true);
+	$coll = array($result);
+	return json_encode($coll);
+}
+function queryCountries($searchString,$mode=""){
+	$fields="fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages;";
 	if($searchString=="all"){
 		$url="https://restcountries.eu/rest/v2/all";
 		$fields.="altSpellings";
+		return file_get_contents($url.$fields);
 	}else{
 		//search on: country name, full name, or code
-		$url="https://restcountries.eu/rest/v2/name/".$searchString."?fullText=true";
+		switch ($mode) {
+			case 'fname':
+				$url="https://restcountries.eu/rest/v2/name/".$searchString."?fullText=true";
+				return nameSearch($url."?".$fields);
+				break;
+			case 'code':
+				$url="https://restcountries.eu/rest/v2/alpha?codes=".$searchString;
+				return nameSearch($url."&".$fields);
+				break;
+			case 'name':
+			default:
+				$url="https://restcountries.eu/rest/v2/name/".$searchString;
+				return nameSearch($url."?".$fields);
+				break;
+		}
 	}
-	$result = file_get_contents($url.$fields);
-	$result = json_decode($result);
-	usort($result, "popCmp");
-	$result = json_encode($result);
-	return $result;
 }
 header('Content-Type: application/json');
 $obj = json_decode($_POST["q"],false);
 $searchString = $obj->searchString;
-echo queryCountries($searchString);
+$mode = $obj->mode;
+echo queryCountries($searchString,$mode);
 /**
  * american samoa (4)
  * name: "American Samoa"

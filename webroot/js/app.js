@@ -2,7 +2,8 @@
 //Make your ajax call to http://localhost:8765/api/index.php here
 function searchFunction() {
 	var searchString = document.getElementById("searchText").value;
-	var data = JSON.stringify({"searchString": searchString});
+	var mode = document.querySelector('input[name = "mode"]:checked').value;
+	var data = JSON.stringify({"searchString": searchString, "mode": mode});
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {

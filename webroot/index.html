@@ -8,12 +8,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </head>
   <body>
-  	<h1>Country Search Template</h1>
-  	<p>This is here to get you started.</p>
     <form id="searchForm" onsubmit="searchFunction();return false;" method="post">
       <label for="searchText">Country search string:</label>
       <input type="text" id="searchText" name="searchText">
-      <input type="submit" value="Search">
+      <input type="submit" value="Search"><br>
+      <h3>Search mode</h3>
+      <input type="radio" id="name" name="mode" value="name"><label for="name">Name</label>
+      <input type="radio" id="fname" name="mode" value="fname"><label for="fname">Full name</label>
+      <input type="radio" id="code" name="mode" value="code"><label for="code">Code</label>
+      <br>
     </form>
     <div id="result">reslts go here</div>
   </body>
