@@ -6,10 +6,16 @@ function searchFunction() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-   			//document.getElementById("result").innerHTML=this.responseText;
-   			var result = JSON.parse(this.responseText);
-   			//document.getElementById("result").innerHTML = result.result[0] + result.result[1] + result.result[2]
-			document.getElementById("result").innerHTML = result.name;
+   			var resTxt="";
+        	if(this.responseText && this.responseText != ""){
+	   			var result = JSON.parse(this.responseText);
+	   			for (country in result){
+	   				resTxt+=result[country].name+"<br>";
+	   			}
+	   		}else{
+	   			resTxt = "No results";
+	   		}
+   			document.getElementById("result").innerHTML = resTxt;
         }
     };
     xmlhttp.open("POST", "http://localhost:8765/api/index.php", true);
