@@ -9,7 +9,8 @@
   </head>
   <body>
     <form id="searchForm" onsubmit="searchFunction();return false;" method="post">
-      <label for="searchText">Country search string:</label>
+      <h2>Countries Search</h2>
+      <label for="searchText">Search string:</label>
       <input type="text" id="searchText" name="searchText">
       <input type="submit" value="Search"><br>
       <h3>Search mode</h3>
@@ -18,15 +19,32 @@
       <input type="radio" id="code" name="mode" value="code"><label for="code">Code</label>
       <br>
     </form>
-    <div id="result">reslts go here</div>
+    <br>
     <table id="tblResult">
+      <colgroup>
+        <col width="150px">
+        <col width="60px">
+        <col width="100px" style="min-width: 40px;">
+        <col width="100px">
+        <col width="150px">
+        <col width="130px">
+        <col>
       <thead>
-        <tr>
-          <th>Name</th><th>Code</th><th></th><th>Region</th><th>Subregion</th><th>Pop.</th><th>Languages</th>
+        <tr align="left">
+          <th>Name</th>
+          <th>Code</th>
+          <th></th>
+          <th>Region</th>
+          <th>Subregion</th>
+          <th>Pop.</th>
+          <th>Languages</th>
         </tr>
       </thead>
       <tbody id="bodyResult">
       </tbody>
+      <tfoot>
+        <tr><td id="result"></td></tr>
+      </tfoot>
     </table>
   </body>
 </html>

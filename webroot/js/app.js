@@ -37,9 +37,14 @@ function addRow(body,country){
 	var row = body.insertRow(body.length);
 	row.insertCell(0).innerHTML = country.name;
 	row.insertCell(1).innerHTML = country.alpha3Code;
-	row.insertCell(2).innerHTML = country.flag;
+	var img = document.createElement("img");
+	img.src = country.flag;
+	img.style = "width:100%;height:auto;";
+	row.insertCell(2).appendChild(img);
 	row.insertCell(3).innerHTML = country.region;
 	row.insertCell(4).innerHTML = country.subregion;
-	row.insertCell(5).innerHTML = country.population;
+	var cell = row.insertCell(5);
+	cell.innerHTML = country.population.toLocaleString();
+	cell.align = "right";
 	row.insertCell(6).innerHTML = languageArrayToString(country.languages);
 }
