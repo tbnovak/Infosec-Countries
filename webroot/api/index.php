@@ -7,9 +7,11 @@ function popCmp($a,$b){
 	return $a["population"] < $b["population"];
 }
 function sortCountriesByPop(&$json){
-	$json=json_decode($json,true);
-	usort($json,"popCmp");
-	$json=json_encode($json);
+	if($json){
+		$json=json_decode($json,true);
+		usort($json,"popCmp");
+		$json=json_encode($json);
+	}
 }
 function nameSearch($url){
 	$result = file_get_contents($url);
@@ -17,7 +19,7 @@ function nameSearch($url){
 	return $result;
 }
 function queryCountries($searchString,$mode=""){
-	$fields="fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages;";
+	$fields="fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages";
 	if($searchString=="all"){
 		$url="https://restcountries.eu/rest/v2/all";
 		$fields.="altSpellings";
@@ -31,7 +33,7 @@ function queryCountries($searchString,$mode=""){
 				break;
 			case 'code':
 				$url="https://restcountries.eu/rest/v2/alpha?codes=".$searchString;
-				return nameSearch($url."&".$fields);
+				return nameSearch($url);//."&".$fields);
 				break;
 			case 'name':
 			default:

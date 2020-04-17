@@ -7,16 +7,14 @@ function searchFunction() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-   			var resTxt="";
+   			var resTxt = "";
         	if(this.responseText && this.responseText != ""){
 	   			var result = JSON.parse(this.responseText);
 	   			for (country in result){
 	   				resTxt+=result[country].name+"<br>";
 	   			}
-	   		}else{
-	   			resTxt = "No results";
-	   		}
-   			document.getElementById("result").innerHTML = resTxt;
+   			}
+   			document.getElementById("result").innerHTML = (resTxt ? resTxt : "No results");
         }
     };
     xmlhttp.open("POST", "http://localhost:8765/api/index.php", true);
