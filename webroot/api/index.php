@@ -5,5 +5,9 @@
  */
 //header('Content-Type: application/json');
 $obj = json_decode($_POST["q"],false);
-echo "#YO ".$obj->searchString.$obj->searchString." LO";
+$searchString=$obj->searchString;
+$result->search = $searchString;
+$result->result=array("YO",$searchString,"LO");
+echo json_encode($result);
+//echo "#YO ".$obj->searchString.$obj->searchString." LO";
 ?>
