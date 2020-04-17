@@ -1,9 +1,37 @@
 /*
 This css file is a placeholder. Use this or roll your own, choice is yours.
 */
+thead{
+	text-align: left;
+	background-color: #e8e8e8;
+}
 td{
 	padding:8px;
 }
 tr:nth-child(even){
 	background-color: #f2f2f2;
+}
+col.name{
+	width: 150px;
+}
+col.code{
+	width: 60px;
+}
+col.flag{
+	width: 100px; min-width: 40px;
+}
+col.reg{
+	width: 100px;
+}
+col.subReg{
+	width: 150px;
+}
+col.pop{
+	width: 134px; 
+}
+col.langs{
+	width: 200px;
+}
+td.pop{
+	text-align:right;
 }

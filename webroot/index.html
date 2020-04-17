@@ -5,14 +5,14 @@
     <title>Countries Search</title>
     <link rel="stylesheet" href="/css/main.css">
     <script src="js/app.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script-->
   </head>
-  <body>
+  <body onload="initPage()">
     <form id="searchForm" onsubmit="searchFunction();return false;" method="post">
       <h2>Countries Search</h2>
       <label for="searchText">Search string:</label>
       <input type="text" id="searchText" name="searchText">
-      <input type="submit" value="Search"><br>
+      <input type="submit" value="Search">
       <h3>Search mode</h3>
       <input type="radio" id="name" name="mode" value="name"><label for="name">Name</label>
       <input type="radio" id="fname" name="mode" value="fname"><label for="fname">Full name</label>
@@ -21,25 +21,6 @@
     </form>
     <br>
     <table id="tblResult">
-      <colgroup>
-        <col width="150px">
-        <col width="60px">
-        <col width="100px" style="min-width: 40px;">
-        <col width="100px">
-        <col width="150px">
-        <col width="130px">
-        <col>
-      <thead>
-        <tr align="left">
-          <th>Name</th>
-          <th>Code</th>
-          <th></th>
-          <th>Region</th>
-          <th>Subregion</th>
-          <th>Pop.</th>
-          <th>Languages</th>
-        </tr>
-      </thead>
       <tbody id="bodyResult">
       </tbody>
       <tfoot>

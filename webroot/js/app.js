@@ -1,5 +1,24 @@
 //Write your javascript here, or roll your own. It's up to you.
 //Make your ajax call to http://localhost:8765/api/index.php here
+function initPage(){
+	var table = document.getElementById("tblResult");
+	var thead = table.createTHead();
+	var hrow = thead.insertRow(0);
+	appendCol(table).classList += "name";
+	appendHeaderCell(hrow).innerHTML = "Name";
+	appendCol(table).classList += "code";
+	appendHeaderCell(hrow).innerHTML = "Code";
+	appendCol(table).classList += "flag";
+	appendHeaderCell(hrow).innerHTML;
+	appendCol(table).classList += "reg";
+	appendHeaderCell(hrow).innerHTML = "Region";
+	appendCol(table).classList += "subReg";
+	appendHeaderCell(hrow).innerHTML = "Subregion";
+	appendCol(table).classList += "pop";
+	appendHeaderCell(hrow).innerHTML = "Pop.";
+	appendCol(table).classList += "langs";
+	appendHeaderCell(hrow).innerHTML = "Languages";
+}
 function searchFunction() {
 	var searchString = document.getElementById("searchText").value;
 	var mode = document.querySelector('input[name = "mode"]:checked').value;
@@ -45,6 +64,16 @@ function addRow(body,country){
 	row.insertCell(4).innerHTML = country.subregion;
 	var cell = row.insertCell(5);
 	cell.innerHTML = country.population.toLocaleString();
-	cell.align = "right";
+	cell.classList+="pop";
 	row.insertCell(6).innerHTML = languageArrayToString(country.languages);
+}
+function appendHeaderCell(row){
+	var cell = document.createElement("th");
+	row.appendChild(cell);
+	return cell;
+}
+function appendCol(table){
+	var col = document.createElement("col");
+	table.appendChild(col);
+	return col;
 }
