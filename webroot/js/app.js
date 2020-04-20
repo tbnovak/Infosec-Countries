@@ -21,29 +21,37 @@ function initPage(){
 }
 function queryStatueChange() {
     if (this.readyState == 4 && this.status == 200) {
-			var resTxt = "";
-		var newBody = document.createElement('tbody');
-    	if(this.responseText && this.responseText != ""){
-   			var result = JSON.parse(this.responseText);
-   			for (country in result){
-   				resTxt+=result[country].name+"<br>";
-   				addRow(newBody,result[country]);
-   			}
+		const newBody = document.createElement('tbody');
+		try{
+			if(!this.responseText || this.responseText == "") throw "No results";
+			const result = JSON.parse(this.responseText);
+			if(!result || result.length == 0) throw "No results";
+			for (country in result){
+				addResultRow(newBody,result[country]);
 			}
-			var oldBody = document.getElementById("tblResult").tBodies[0];
-			oldBody.parentNode.replaceChild(newBody,oldBody);
-			document.getElementById("result").innerHTML = (resTxt ? "" : "No results");
+   		} catch (err) {
+   			setResultString("Error: " + err);
+   		}
+		const oldBody = document.getElementById("tblResult").tBodies[0];
+		oldBody.parentNode.replaceChild(newBody,oldBody);
+		//document.getElementById("result").innerHTML = (resTxt ? "" : "No results");
     }
 }
 function searchFunction() {
-	var searchString = document.getElementById("searchText").value;
-	var mode = document.querySelector('input[name = "mode"]:checked').value;
-	var data = JSON.stringify({"searchString": searchString, "mode": mode});
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = queryStatueChange;
-    xmlhttp.open("POST", "http://localhost:8765/api/index.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("q="+data);
+	try {
+		var searchString = document.getElementById("searchText").value;
+		if (searchString == "") throw "Empty search string."
+		var mode = document.querySelector('input[name = "mode"]:checked').value;
+		var data = JSON.stringify({"searchString": searchString, "mode": mode});
+	    var xmlhttp = new XMLHttpRequest();
+	    xmlhttp.onreadystatechange = queryStatueChange;
+	    xmlhttp.open("POST", "http://localhost:8765/api/index.php", true);
+	    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    xmlhttp.send("q="+data);
+	}
+	catch(err) {
+		setResultString("Error searching. " + err);
+	}
 	return false;
 }
 function languageArrayToString(array){
@@ -53,7 +61,7 @@ function languageArrayToString(array){
 	}
 	return langs.join(", ");
 }
-function addRow(body,country){
+function addResultRow(body,country){
 	var row = body.insertRow(body.length);
 	row.insertCell(0).innerHTML = country.name;
 	row.insertCell(1).innerHTML = country.alpha3Code;
@@ -77,4 +85,15 @@ function appendCol(table){
 	var col = document.createElement("col");
 	table.appendChild(col);
 	return col;
+}
+function setResultString(string){
+	const resultEl = getResultStringEl();
+	if(resultEl){
+		resultEl.innerHTML = string;
+	} else {
+		alert("Result: " + string);
+	}
+}
+function getResultStringEl(){
+	return document.getElementById("result");
 }
