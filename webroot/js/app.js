@@ -4,38 +4,31 @@ var resultTableColumns = [
 	{
 		class: "name",
 		title: "Name",
-		callback: addNameCell
-	},
+		callback: addNameCell},
 	{
 		class: "code",
 		title: "Code",
-		callback: add3codeCell
-	},
+		callback: add3codeCell},
 	{
 		class: "flag",
 		title: "",
-		callback: addFlagImgCell
-	},
+		callback: addFlagImgCell},
 	{
 		class: "reg",
 		title: "Region",
-		callback: addRegionCell
-	},
+		callback: addRegionCell},
 	{
 		class: "subReg",
 		title: "Subregion",
-		callback: addSubregionCell
-	},
+		callback: addSubregionCell},
 	{
 		class: "pop",
 		title: "Pop.",
-		callback: addPopulationCell
-	},
+		callback: addPopulationCell},
 	{
 		class: "langs",
 		title: "Languages",
-		callback: addLanguageCell
-	}
+		callback: addLanguageCell}
 ];
 function initPage() {
 	//clear search
@@ -44,20 +37,10 @@ function initPage() {
 	const table = document.getElementById("tblResult");
 	const thead = table.createTHead();
 	const hrow = thead.insertRow(0);
-	appendCol(table).classList += "name";
-	appendHeaderCell(hrow).innerHTML = "Name";
-	appendCol(table).classList += "code";
-	appendHeaderCell(hrow).innerHTML = "Code";
-	appendCol(table).classList += "flag";
-	appendHeaderCell(hrow);
-	appendCol(table).classList += "reg";
-	appendHeaderCell(hrow).innerHTML = "Region";
-	appendCol(table).classList += "subReg";
-	appendHeaderCell(hrow).innerHTML = "Subregion";
-	appendCol(table).classList += "pop";
-	appendHeaderCell(hrow).innerHTML = "Pop.";
-	appendCol(table).classList += "langs";
-	appendHeaderCell(hrow).innerHTML = "Languages";
+	for (let i=0; i < resultTableColumns.length; i++){
+		appendCol(table).classList += resultTableColumns[i].class;
+		appendHeaderCell(hrow).innerHTML = resultTableColumns[i].title;
+	}
 }
 function searchFunction() {
 	setResultErrorString("");
