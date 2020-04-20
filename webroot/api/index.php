@@ -23,7 +23,7 @@ function queryCountries($searchString, $mode = "") {
 	if ($searchString == "all") {
 		$url = "https://restcountries.eu/rest/v2/all";
 		$fields .= "altSpellings";
-		return file_get_contents($url.$fields);
+		return file_get_contents($url . "?" . $fields);
 	} else {
 		//search on: country name, full name, or code
 		switch ($mode) {

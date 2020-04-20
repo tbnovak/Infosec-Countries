@@ -27,7 +27,7 @@ function queryStatueChange() {
 		const newBody = document.createElement('tbody');
 		var summary = {regions: {}};
 		try{
-			if (!this.responseText || this.responseText == "") throw "No results";
+			if (!this.responseText || this.responseText == "") throw "No result";
 			const result = JSON.parse(this.responseText);
 			if (!result || result.length == 0) throw "No results";
 			for (country of result){
@@ -36,7 +36,7 @@ function queryStatueChange() {
    		} catch (err) {
    			setResultErrorString("Error: " + err);
    		}
-   		emitSummary(summary);
+   		//emitSummary(summary);
    		replaceResultTableBody(newBody);
     }
 }
@@ -67,14 +67,15 @@ function searchFunction() {
 	return false;
 }
 function languageArrayToString(array){
-	const langs = [];
+	if (!array) return "";
+	var langs = [];
 	for (lang of array){
 		langs.push(lang.name);
 	}
 	return langs.join(", ");
 }
 function addResultRow(body, country, summary){
-	summary.regions[country.region] = (summary.regions[country.region] || 0) + 1;
+	//summary.regions[country.region] = (summary.regions[country.region] || 0) + 1;
 	const row = body.insertRow(body.length);
 	row.insertCell(0).innerHTML = country.name;
 	row.insertCell(1).innerHTML = country.alpha3Code;
