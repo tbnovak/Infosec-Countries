@@ -60,35 +60,24 @@ function queryStatueChange() {
     }
 }
 function emitSummary(summary){
-	// var regs = [];
-	// for(var reg in summary.regions){
-	// 	regs.push(reg + ": " + summary.regions[reg]);
-	// }
-	// alert(regs.join("\n"));
-	// var subregs = [];
-	// for(var subreg in summary.subRegions){
-	// 	subregs.push(subreg + ": " + summary.subRegions[subreg]);
-	// }
-	// alert(subregs.join("\n"));
-	// alert("total: " + summary.total);
-	var summary2 = {
-		regions: {
-			"Americas": {
-				count: 4,
-				subs: {
-					"Caribbean": 13,
-					"South America" : 3
-				}
-			},
-			"Europe": {
-				count: 2,
-				subs: {
-					"North Europe": 1
-				}
-			}
-		},
-		total: 250
-	};
+	// var summary2 = {
+	// 	regions: {
+	// 		"Americas": {
+	// 			count: 4,
+	// 			subs: {
+	// 				"Caribbean": 13,
+	// 				"South America" : 3
+	// 			}
+	// 		},
+	// 		"Europe": {
+	// 			count: 2,
+	// 			subs: {
+	// 				"North Europe": 1
+	// 			}
+	// 		}
+	// 	},
+	// 	total: 250
+	// };
 	var alertStr = ""
 	for(var region in summary.regions) {
 		alertStr += region + ": " + summary.regions[region].count + "\n";
@@ -96,22 +85,22 @@ function emitSummary(summary){
 			alertStr += "-" + sub + ": " + summary.regions[region].subs[sub] + "\n";
 		}
 	}
+	alertStr += "Total: " + summary.total;
 	alert(alertStr);
 }
 function summarizeCountry(summary, country){
-	if(!summary.regions[country.region]) {
-		summary.regions[country.region] = {
+	const region = (country.region == "" ? "<NONE>" : country.region);
+	const subreg = (country.subregion == "" ? "<NONE>" : country.subregion);
+	if(!summary.regions[region]) {
+		summary.regions[region] = {
 			count: 1,
 			subs: {}
 		};
 	} else {
-		summary.regions[country.region].count++;
+		summary.regions[region].count++;
 	}
-	if(!summary.regions[country.region].subs[country.subregion]){
-		summary.regions[country.region].subs[country.subregion] = 1;
-	} else {
-		summary.regions[country.region].subs[country.subregion]++;
-	}
+	const subs = summary.regions[region].subs;
+	subs[subreg] = (subs[subreg] || 0) + 1;
 	summary.total++;
 }
 function addResultRow(body, country, summary){
