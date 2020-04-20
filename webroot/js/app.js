@@ -22,31 +22,6 @@ function initPage() {
 	appendCol(table).classList += "langs";
 	appendHeaderCell(hrow).innerHTML = "Languages";
 }
-function queryStatueChange() {
-    if (this.readyState == 4 && this.status == 200) {
-		const newBody = document.createElement('tbody');
-		var summary = {regions: {}};
-		try{
-			if (!this.responseText || this.responseText == "") throw "No result";
-			const result = JSON.parse(this.responseText);
-			if (!result || result.length == 0) throw "No results";
-			for (country of result){
-				addResultRow(newBody, country, summary);
-			}
-   		} catch (err) {
-   			setResultErrorString("Error: " + err);
-   		}
-   		//emitSummary(summary);
-   		replaceResultTableBody(newBody);
-    }
-}
-function emitSummary(summary){
-	var regs = [];
-	for(var reg in summary.regions){
-		regs.push(reg + ": " + summary.regions[reg]);
-	}
-	alert(regs.join("\n"));
-}
 function searchFunction() {
 	setResultErrorString("");
 	replaceResultTableBody();
@@ -66,20 +41,81 @@ function searchFunction() {
 	}
 	return false;
 }
-function languageArrayToString(languageArray){
-	try{
-		if (!languageArray) return "";
-		var langs = [];
-		for (lang of languageArray){
-			langs.push(lang.name);
+function queryStatueChange() {
+    if (this.readyState == 4 && this.status == 200) {
+		const newBody = document.createElement('tbody');
+		var summary = {regions: {}, total: 0};
+		try{
+			if (!this.responseText || this.responseText == "") throw "No result";
+			const result = JSON.parse(this.responseText);
+			if (!result || result.length == 0) throw "No results";
+			for (country of result){
+				addResultRow(newBody, country, summary);
+			}
+   		} catch (err) {
+   			setResultErrorString("Error: " + err);
+   		}
+   		emitSummary(summary);
+   		replaceResultTableBody(newBody);
+    }
+}
+function emitSummary(summary){
+	// var regs = [];
+	// for(var reg in summary.regions){
+	// 	regs.push(reg + ": " + summary.regions[reg]);
+	// }
+	// alert(regs.join("\n"));
+	// var subregs = [];
+	// for(var subreg in summary.subRegions){
+	// 	subregs.push(subreg + ": " + summary.subRegions[subreg]);
+	// }
+	// alert(subregs.join("\n"));
+	// alert("total: " + summary.total);
+	var summary2 = {
+		regions: {
+			"Americas": {
+				count: 4,
+				subs: {
+					"Caribbean": 13,
+					"South America" : 3
+				}
+			},
+			"Europe": {
+				count: 2,
+				subs: {
+					"North Europe": 1
+				}
+			}
+		},
+		total: 250
+	};
+	var alertStr = ""
+	for(var region in summary.regions) {
+		alertStr += region + ": " + summary.regions[region].count + "\n";
+		for(var sub in summary.regions[region].subs){
+			alertStr += "-" + sub + ": " + summary.regions[region].subs[sub] + "\n";
 		}
-		return langs.join(", ");
-	} catch (err) {
-		return err;
 	}
+	alert(alertStr);
+}
+function summarizeCountry(summary, country){
+	if(!summary.regions[country.region]) {
+		summary.regions[country.region] = {
+			count: 1,
+			subs: {}
+		};
+	} else {
+		summary.regions[country.region].count++;
+	}
+	if(!summary.regions[country.region].subs[country.subregion]){
+		summary.regions[country.region].subs[country.subregion] = 1;
+	} else {
+		summary.regions[country.region].subs[country.subregion]++;
+	}
+	summary.total++;
 }
 function addResultRow(body, country, summary){
-	//summary.regions[country.region] = (summary.regions[country.region] || 0) + 1;
+	summarizeCountry(summary, country);
 	const row = body.insertRow(body.length);
 	row.insertCell(0).innerHTML = country.name;
 	row.insertCell(1).innerHTML = country.alpha3Code;
@@ -93,6 +129,18 @@ function addResultRow(body, country, summary){
 	cell.innerHTML = country.population.toLocaleString();
 	cell.classList += "pop";
 	row.insertCell(6).innerHTML = languageArrayToString(country.languages);
+}
+function languageArrayToString(languageArray){
+	try{
+		if (!languageArray) return "";
+		var langs = [];
+		for (lang of languageArray){
+			langs.push(lang.name);
+		}
+		return langs.join(", ");
+	} catch (err) {
+		return err;
+	}
 }
 function appendHeaderCell(row){
 	const cell = document.createElement("th");
