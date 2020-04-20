@@ -1,40 +1,52 @@
 /*
 This css file is a placeholder. Use this or roll your own, choice is yours.
 */
-thead{
+thead {
 	text-align: left;
 	background-color: #e8e8e8;
 }
-td{
+td {
 	padding: 8px;
 }
-tr:nth-child(even){
+tr:nth-child(even) {
 	background-color: #f2f2f2;
 }
-col.name{
+col.name {
 	width: 150px;
 }
-col.code{
+col.code {
 	width: 60px;
 }
-col.flag{
+col.flag {
 	width: 100px; min-width: 40px;
 }
-col.reg{
+col.reg {
 	width: 100px;
 }
-col.subReg{
+col.subReg {
 	width: 150px;
 }
-col.pop{
+col.pop {
 	width: 134px; 
 }
-col.langs{
+col.langs {
 	width: 200px;
 }
-td.pop{
+td.pop {
 	text-align: right;
 }
-tbody tr{
+tbody tr {
 	height: 74px;
+}
+#searchForm {
+	height: 20%;
+  overflow-y: scroll;
+}
+#tblResult {
+	height: 50%;
+  overflow-y: scroll;
+}
+#listSumm {
+	height: 30%;
+  overflow-y: scroll;
 }

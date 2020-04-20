@@ -23,8 +23,9 @@ function initPage() {
 	appendHeaderCell(hrow).innerHTML = "Languages";
 }
 function searchFunction() {
-	setResultErrorString("");
-	replaceResultTableBody();
+	//setResultErrorString("");
+	//replaceResultTableBody();
+	//replaceResultSummaryList();
 	try {
 		const searchString = document.getElementById("searchText").value;
 		if (searchString == "") throw "Empty search string."
@@ -78,19 +79,25 @@ function emitSummary(summary){
 	// 	},
 	// 	total: 250
 	// };
-	var alertStr = ""
+	var sumList = document.createElement("ul");
+	sumList.innerHTML = "Total: " + summary.total;
 	for(var region in summary.regions) {
-		alertStr += region + ": " + summary.regions[region].count + "\n";
+		var liReg = document.createElement("li");
+		liReg.innerHTML = region + ": " + summary.regions[region].count;
+		var ulSubs = document.createElement("ul");
 		for(var sub in summary.regions[region].subs){
-			alertStr += "-" + sub + ": " + summary.regions[region].subs[sub] + "\n";
+			var liSub = document.createElement("li");
+			liSub.innerHTML = sub + ": " + summary.regions[region].subs[sub];
+			ulSubs.appendChild(liSub);
 		}
+		liReg.appendChild(ulSubs);
+		sumList.appendChild(liReg);
 	}
-	alertStr += "Total: " + summary.total;
-	alert(alertStr);
+	replaceResultSummaryList(sumList);
 }
 function summarizeCountry(summary, country){
-	const region = (country.region == "" ? "<NONE>" : country.region);
-	const subreg = (country.subregion == "" ? "<NONE>" : country.subregion);
+	const region = (country.region == "" ? "NONE" : country.region);
+	const subreg = (country.subregion == "" ? "NONE" : country.subregion);
 	if(!summary.regions[region]) {
 		summary.regions[region] = {
 			count: 1,
@@ -157,7 +164,15 @@ function replaceResultTableBody(newBod){
 	if (!newBod) {
 		newBod = document.createElement('tbody');
 	}
-	oldBody.parentNode.replaceChild(newBod,oldBody);
+	oldBody.parentNode.replaceChild(newBod, oldBody);
+}
+function replaceResultSummaryList(newList){
+	const oldSumm = document.getElementById("listSumm");
+	if (!newList) {
+		newList = document.createElement('ul');
+	}
+	newList.id = "listSumm";
+	oldSumm.parentNode.replaceChild(newList, oldSumm);
 }
 if (window.history.replaceState) {
 	window.history.replaceState(null, null, window.location.href);
