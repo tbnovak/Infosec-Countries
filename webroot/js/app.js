@@ -1,5 +1,42 @@
 //Write your javascript here, or roll your own. It's up to you.
 //Make your ajax call to http://localhost:8765/api/index.php here
+var resultTableColumns = [
+	{
+		class: "name",
+		title: "Name",
+		callback: addNameCell
+	},
+	{
+		class: "code",
+		title: "Code",
+		callback: add3codeCell
+	},
+	{
+		class: "flag",
+		title: "",
+		callback: addFlagImgCell
+	},
+	{
+		class: "reg",
+		title: "Region",
+		callback: addRegionCell
+	},
+	{
+		class: "subReg",
+		title: "Subregion",
+		callback: addSubregionCell
+	},
+	{
+		class: "pop",
+		title: "Pop.",
+		callback: addPopulationCell
+	},
+	{
+		class: "langs",
+		title: "Languages",
+		callback: addLanguageCell
+	}
+];
 function initPage() {
 	//clear search
 	document.getElementById("searchForm").reset();
@@ -12,7 +49,7 @@ function initPage() {
 	appendCol(table).classList += "code";
 	appendHeaderCell(hrow).innerHTML = "Code";
 	appendCol(table).classList += "flag";
-	appendHeaderCell(hrow).innerHTML;
+	appendHeaderCell(hrow);
 	appendCol(table).classList += "reg";
 	appendHeaderCell(hrow).innerHTML = "Region";
 	appendCol(table).classList += "subReg";
@@ -23,9 +60,9 @@ function initPage() {
 	appendHeaderCell(hrow).innerHTML = "Languages";
 }
 function searchFunction() {
-	//setResultErrorString("");
-	//replaceResultTableBody();
-	//replaceResultSummaryList();
+	setResultErrorString("");
+	replaceResultTableBody();
+	replaceResultSummaryList();
 	try {
 		const searchString = document.getElementById("searchText").value;
 		if (searchString == "") throw "Empty search string."
@@ -50,7 +87,7 @@ function queryStatueChange() {
 			if (!this.responseText || this.responseText == "") throw "No result";
 			const result = JSON.parse(this.responseText);
 			if (!result || result.length == 0) throw "No results";
-			for (country of result){
+			for (let country of result){
 				addResultRow(newBody, country, summary);
 			}
    		} catch (err) {
@@ -61,7 +98,7 @@ function queryStatueChange() {
     }
 }
 function emitSummary(summary){
-	// var summary2 = {
+	// var summary = {
 	// 	regions: {
 	// 		"Americas": {
 	// 			count: 4,
@@ -81,12 +118,12 @@ function emitSummary(summary){
 	// };
 	var sumList = document.createElement("ul");
 	sumList.innerHTML = "Total: " + summary.total;
-	for(var region in summary.regions) {
-		var liReg = document.createElement("li");
+	for (let region in summary.regions) {
+		let liReg = document.createElement("li");
 		liReg.innerHTML = region + ": " + summary.regions[region].count;
-		var ulSubs = document.createElement("ul");
-		for(var sub in summary.regions[region].subs){
-			var liSub = document.createElement("li");
+		let ulSubs = document.createElement("ul");
+		for (let sub in summary.regions[region].subs){
+			let liSub = document.createElement("li");
 			liSub.innerHTML = sub + ": " + summary.regions[region].subs[sub];
 			ulSubs.appendChild(liSub);
 		}
@@ -110,27 +147,44 @@ function summarizeCountry(summary, country){
 	subs[subreg] = (subs[subreg] || 0) + 1;
 	summary.total++;
 }
+function addNameCell(cell, country){
+	cell.innerHTML = country.name;
+}
+function add3codeCell(cell, country){
+	cell.innerHTML = country.alpha3Code;
+}
+function addFlagImgCell(cell, country){
+	const img = document.createElement("img");
+	img.src = country.flag;
+	img.style = "width: 100%; height: auto;";
+	cell.appendChild(img);
+}
+function addRegionCell(cell, country){
+	cell.innerHTML = country.region;
+}
+function addSubregionCell(cell, country){
+	cell.innerHTML = country.subregion;
+}
+function addPopulationCell(cell, country){
+	cell.innerHTML = country.population.toLocaleString();
+	cell.classList += "pop";
+}
+function addLanguageCell(cell, country){
+	cell.innerHTML = languageArrayToString(country.languages);
+}
 function addResultRow(body, country, summary){
 	summarizeCountry(summary, country);
 	const row = body.insertRow(body.length);
-	row.insertCell(0).innerHTML = country.name;
-	row.insertCell(1).innerHTML = country.alpha3Code;
-	const img = document.createElement("img");
-	img.src = country.flag;
-	img.style = "width:100%;height:auto;";
-	row.insertCell(2).appendChild(img);
-	row.insertCell(3).innerHTML = country.region;
-	row.insertCell(4).innerHTML = country.subregion;
-	const cell = row.insertCell(5);
-	cell.innerHTML = country.population.toLocaleString();
-	cell.classList += "pop";
-	row.insertCell(6).innerHTML = languageArrayToString(country.languages);
+	for(let i = 0; i<7; i++){
+		let cell = row.insertCell(i);
+		resultTableColumns[i].callback(cell, country);
+	}
 }
 function languageArrayToString(languageArray){
 	try{
 		if (!languageArray) return "";
 		var langs = [];
-		for (lang of languageArray){
+		for (let lang of languageArray){
 			langs.push(lang.name);
 		}
 		return langs.join(", ");

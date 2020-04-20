@@ -1,6 +1,7 @@
 /*
 This css file is a placeholder. Use this or roll your own, choice is yours.
 */
+
 thead {
 	text-align: left;
 	background-color: #e8e8e8;
@@ -37,16 +38,4 @@ td.pop {
 }
 tbody tr {
 	height: 74px;
-}
-#searchForm {
-	height: 20%;
-  overflow-y: scroll;
-}
-#tblResult {
-	height: 50%;
-  overflow-y: scroll;
-}
-#listSumm {
-	height: 30%;
-  overflow-y: scroll;
 }
