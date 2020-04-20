@@ -66,13 +66,17 @@ function searchFunction() {
 	}
 	return false;
 }
-function languageArrayToString(array){
-	if (!array) return "";
-	var langs = [];
-	for (lang of array){
-		langs.push(lang.name);
+function languageArrayToString(languageArray){
+	try{
+		if (!languageArray) return "";
+		var langs = [];
+		for (lang of languageArray){
+			langs.push(lang.name);
+		}
+		return langs.join(", ");
+	} catch (err) {
+		return err;
 	}
-	return langs.join(", ");
 }
 function addResultRow(body, country, summary){
 	//summary.regions[country.region] = (summary.regions[country.region] || 0) + 1;

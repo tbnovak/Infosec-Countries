@@ -19,7 +19,7 @@ function nameSearch($url){
 	return $result;
 }
 function queryCountries($searchString, $mode = "") {
-	$fields = "fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages";
+	$fields = "fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages;";
 	if ($searchString == "all") {
 		$url = "https://restcountries.eu/rest/v2/all";
 		$fields .= "altSpellings";
