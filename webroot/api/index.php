@@ -3,7 +3,7 @@
  * This is a template php file for your countries search.
  * Use as you will, or start over. It's up to you.
  */
-function popCmp($a,$b){
+function popCmp($a, $b){
 	return $a["population"] < $b["population"];
 }
 function sortCountriesByPop(&$json){
@@ -18,7 +18,7 @@ function nameSearch($url){
 	sortCountriesByPop($result);
 	return $result;
 }
-function queryCountries($searchString,$mode=""){
+function queryCountries($searchString, $mode = "") {
 	$fields = "fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages";
 	if ($searchString == "all") {
 		$url = "https://restcountries.eu/rest/v2/all";

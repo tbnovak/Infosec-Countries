@@ -1,6 +1,9 @@
 //Write your javascript here, or roll your own. It's up to you.
 //Make your ajax call to http://localhost:8765/api/index.php here
 function initPage() {
+	//clear search
+	document.getElementById("searchForm").reset();
+	//build table. Order matters, so I want it in the same file the rows are created
 	const table = document.getElementById("tblResult");
 	const thead = table.createTHead();
 	const hrow = thead.insertRow(0);
@@ -33,11 +36,16 @@ function queryStatueChange() {
    		} catch (err) {
    			setResultErrorString("Error: " + err);
    		}
-   		for(var reg in summary.regions){
-   			alert(reg + ": " + summary.regions[reg]);
-   		}
+   		emitSummary(summary);
    		replaceResultTableBody(newBody);
     }
+}
+function emitSummary(summary){
+	var regs = [];
+	for(var reg in summary.regions){
+		regs.push(reg + ": " + summary.regions[reg]);
+	}
+	alert(regs.join("\n"));
 }
 function searchFunction() {
 	setResultErrorString("");
@@ -108,4 +116,7 @@ function replaceResultTableBody(newBod){
 		newBod = document.createElement('tbody');
 	}
 	oldBody.parentNode.replaceChild(newBod,oldBody);
+}
+if (window.history.replaceState) {
+	window.history.replaceState(null, null, window.location.href);
 }
