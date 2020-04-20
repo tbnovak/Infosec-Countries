@@ -6,7 +6,7 @@ thead{
 	background-color: #e8e8e8;
 }
 td{
-	padding:8px;
+	padding: 8px;
 }
 tr:nth-child(even){
 	background-color: #f2f2f2;
@@ -33,5 +33,8 @@ col.langs{
 	width: 200px;
 }
 td.pop{
-	text-align:right;
+	text-align: right;
+}
+tbody tr{
+	height: 74px;
 }

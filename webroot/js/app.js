@@ -1,6 +1,6 @@
 //Write your javascript here, or roll your own. It's up to you.
 //Make your ajax call to http://localhost:8765/api/index.php here
-function initPage(){
+function initPage() {
 	const table = document.getElementById("tblResult");
 	const thead = table.createTHead();
 	const hrow = thead.insertRow(0);
@@ -22,15 +22,19 @@ function initPage(){
 function queryStatueChange() {
     if (this.readyState == 4 && this.status == 200) {
 		const newBody = document.createElement('tbody');
+		var summary = {regions: {}};
 		try{
-			if(!this.responseText || this.responseText == "") throw "No results";
+			if (!this.responseText || this.responseText == "") throw "No results";
 			const result = JSON.parse(this.responseText);
-			if(!result || result.length == 0) throw "No results";
-			for (country in result){
-				addResultRow(newBody,result[country]);
+			if (!result || result.length == 0) throw "No results";
+			for (country of result){
+				addResultRow(newBody, country, summary);
 			}
    		} catch (err) {
    			setResultErrorString("Error: " + err);
+   		}
+   		for(var reg in summary.regions){
+   			alert(reg + ": " + summary.regions[reg]);
    		}
    		replaceResultTableBody(newBody);
     }
@@ -39,15 +43,15 @@ function searchFunction() {
 	setResultErrorString("");
 	replaceResultTableBody();
 	try {
-		var searchString = document.getElementById("searchText").value;
+		const searchString = document.getElementById("searchText").value;
 		if (searchString == "") throw "Empty search string."
-		var mode = document.querySelector('input[name = "mode"]:checked').value;
-		var data = JSON.stringify({"searchString": searchString, "mode": mode});
-	    var xmlhttp = new XMLHttpRequest();
+		const mode = document.querySelector('input[name = "mode"]:checked').value;
+		const data = JSON.stringify({"searchString": searchString, "mode": mode});
+	    const xmlhttp = new XMLHttpRequest();
 	    xmlhttp.onreadystatechange = queryStatueChange;
 	    xmlhttp.open("POST", "http://localhost:8765/api/index.php", true);
 	    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	    xmlhttp.send("q="+data);
+	    xmlhttp.send("q=" + data);
 	}
 	catch(err) {
 		setResultErrorString("Error searching. " + err);
@@ -55,34 +59,35 @@ function searchFunction() {
 	return false;
 }
 function languageArrayToString(array){
-	var langs = [];
+	const langs = [];
 	for (lang of array){
 		langs.push(lang.name);
 	}
 	return langs.join(", ");
 }
-function addResultRow(body,country){
-	var row = body.insertRow(body.length);
+function addResultRow(body, country, summary){
+	summary.regions[country.region] = (summary.regions[country.region] || 0) + 1;
+	const row = body.insertRow(body.length);
 	row.insertCell(0).innerHTML = country.name;
 	row.insertCell(1).innerHTML = country.alpha3Code;
-	var img = document.createElement("img");
+	const img = document.createElement("img");
 	img.src = country.flag;
 	img.style = "width:100%;height:auto;";
 	row.insertCell(2).appendChild(img);
 	row.insertCell(3).innerHTML = country.region;
 	row.insertCell(4).innerHTML = country.subregion;
-	var cell = row.insertCell(5);
+	const cell = row.insertCell(5);
 	cell.innerHTML = country.population.toLocaleString();
 	cell.classList += "pop";
 	row.insertCell(6).innerHTML = languageArrayToString(country.languages);
 }
 function appendHeaderCell(row){
-	var cell = document.createElement("th");
+	const cell = document.createElement("th");
 	row.appendChild(cell);
 	return cell;
 }
 function appendCol(table){
-	var col = document.createElement("col");
+	const col = document.createElement("col");
 	table.appendChild(col);
 	return col;
 }
@@ -99,7 +104,7 @@ function getResultStringEl(){
 }
 function replaceResultTableBody(newBod){
 	const oldBody = document.getElementById("tblResult").tBodies[0];
-	if(!newBod) {
+	if (!newBod) {
 		newBod = document.createElement('tbody');
 	}
 	oldBody.parentNode.replaceChild(newBod,oldBody);
