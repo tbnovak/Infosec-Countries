@@ -1,9 +1,9 @@
 //Write your javascript here, or roll your own. It's up to you.
 //Make your ajax call to http://localhost:8765/api/index.php here
 function initPage(){
-	var table = document.getElementById("tblResult");
-	var thead = table.createTHead();
-	var hrow = thead.insertRow(0);
+	const table = document.getElementById("tblResult");
+	const thead = table.createTHead();
+	const hrow = thead.insertRow(0);
 	appendCol(table).classList += "name";
 	appendHeaderCell(hrow).innerHTML = "Name";
 	appendCol(table).classList += "code";
@@ -30,14 +30,14 @@ function queryStatueChange() {
 				addResultRow(newBody,result[country]);
 			}
    		} catch (err) {
-   			setResultString("Error: " + err);
+   			setResultErrorString("Error: " + err);
    		}
-		const oldBody = document.getElementById("tblResult").tBodies[0];
-		oldBody.parentNode.replaceChild(newBody,oldBody);
-		//document.getElementById("result").innerHTML = (resTxt ? "" : "No results");
+   		replaceResultTableBody(newBody);
     }
 }
 function searchFunction() {
+	setResultErrorString("");
+	replaceResultTableBody();
 	try {
 		var searchString = document.getElementById("searchText").value;
 		if (searchString == "") throw "Empty search string."
@@ -50,7 +50,7 @@ function searchFunction() {
 	    xmlhttp.send("q="+data);
 	}
 	catch(err) {
-		setResultString("Error searching. " + err);
+		setResultErrorString("Error searching. " + err);
 	}
 	return false;
 }
@@ -73,7 +73,7 @@ function addResultRow(body,country){
 	row.insertCell(4).innerHTML = country.subregion;
 	var cell = row.insertCell(5);
 	cell.innerHTML = country.population.toLocaleString();
-	cell.classList+="pop";
+	cell.classList += "pop";
 	row.insertCell(6).innerHTML = languageArrayToString(country.languages);
 }
 function appendHeaderCell(row){
@@ -86,7 +86,7 @@ function appendCol(table){
 	table.appendChild(col);
 	return col;
 }
-function setResultString(string){
+function setResultErrorString(string){
 	const resultEl = getResultStringEl();
 	if(resultEl){
 		resultEl.innerHTML = string;
@@ -96,4 +96,11 @@ function setResultString(string){
 }
 function getResultStringEl(){
 	return document.getElementById("result");
+}
+function replaceResultTableBody(newBod){
+	const oldBody = document.getElementById("tblResult").tBodies[0];
+	if(!newBod) {
+		newBod = document.createElement('tbody');
+	}
+	oldBody.parentNode.replaceChild(newBod,oldBody);
 }
