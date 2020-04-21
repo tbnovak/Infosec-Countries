@@ -1,17 +1,35 @@
 /*
 This css file is a placeholder. Use this or roll your own, choice is yours.
 */
-
-thead {
-	text-align: left;
-	background-color: #e8e8e8;
+.wrapper {
+	display: grid;
+	grid-template-rows: 150px auto;
+	grid-template-columns: 350px auto;
+	grid-row-gap: 20px;
+	height: 100%;
+	position: fixed;
 }
-.row:nth-child(odd) {
-	background-color: #f2f2f2;
+@media (max-width: 640px){
+	.wrapper{
+		display: flex;
+		flex-direction: column;
+	}
 }
-.row.header {
-	background-color: #e8e8e8;
-	font-weight: 600;
+.form {
+	grid-column: 1;
+	grid-row: 1;
+}
+.summary {
+	grid-column: 1;
+	grid-row: 2;
+	position: relative;
+	overflow-y: scroll;
+}
+.result {
+	grid-column: 2;
+	grid-row: 1/2;
+	overflow-y: scroll;
+	height: 100vh;
 }
 .table {
 	display: table;
@@ -19,6 +37,13 @@ thead {
 .row {
 	display: table-row;
 	max-height: 74px;
+}
+.row:nth-child(odd) {
+	background-color: #f2f2f2;
+}
+.row.header {
+	background-color: #e8e8e8;
+	font-weight: 600;
 }
 .cell {
 	display: table-cell;
@@ -32,7 +57,8 @@ thead {
 	width: 60px;
 }
 .cell.flag {
-	width: 100px; min-width: 40px;
+	width: 100px; 
+	min-width: 40px;
 }
 img{
 	display: block; 
@@ -54,27 +80,27 @@ img{
 .cell.langs {
 	width: 200px;
 }
-.wrapper {
-	display: grid;
-	grid-template-rows: 150px auto;
-	grid-template-columns: 350px auto;
-	grid-row-gap: 20px;
-	height: 100%;
-	position: fixed;
-}
-.form {
-	grid-column: 1;
-	grid-row: 1;
-}
-.result {
-	grid-column: 2;
-	grid-row: 1/2;
-	overflow-y: scroll;
-	height: 100vh;
-}
-.summary {
-	grid-column: 1;
-	grid-row: 2;
-	position: relative;
-	overflow-y: scroll;
+@media (max-width: 1090px){
+	.wrapper{
+		grid-template-columns: 1fr 1fr;
+	}
+	.row{
+		display: block;
+		padding: 8px;
+		max-height: 100%;
+	}
+	.cell{
+		display: block;
+		padding: 2px;
+	}
+	.header{
+		display: none;
+	}
+	.cell.flag{
+		float: right;
+		display: inline;
+	}
+	.cell.pop{
+		text-align: left;
+	}
 }
