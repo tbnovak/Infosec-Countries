@@ -9,15 +9,12 @@ This css file is a placeholder. Use this or roll your own, choice is yours.
 	height: 100%;
 	position: fixed;
 }
-@media (max-width: 640px){
-	.wrapper{
-		display: flex;
-		flex-direction: column;
-	}
-}
 .form {
 	grid-column: 1;
 	grid-row: 1;
+}
+input[type=text] {
+	width: 
 }
 .summary {
 	grid-column: 1;
@@ -32,23 +29,23 @@ This css file is a placeholder. Use this or roll your own, choice is yours.
 	height: 100vh;
 }
 .table {
-	display: table;
+	display: flex;
+	flex-flow: column nowrap;
 }
 .row {
-	display: table-row;
-	max-height: 74px;
+	display: flex;
+	flex-flow: row nowrap;
+	max-height: 200px;
 }
 .row:nth-child(odd) {
-	background-color: #f2f2f2;
+	background-color: #e8e8e8;
 }
 .row.header {
-	background-color: #e8e8e8;
+	background-color: #d8d8d8;
 	font-weight: 600;
 }
 .cell {
-	display: table-cell;
 	padding: 8px;
-	vertical-align: middle;
 }
 .cell.name {
 	width: 150px;
@@ -57,10 +54,13 @@ This css file is a placeholder. Use this or roll your own, choice is yours.
 	width: 60px;
 }
 .cell.flag {
-	width: 100px; 
 	min-width: 40px;
+	max-width: 100px;
+	width: auto;
+	background-color: #e8e8e8;
+	flex-shrink: 8;
 }
-img{
+img {
 	display: block; 
 	width: 100%; 
 	height: auto; 
@@ -70,7 +70,7 @@ img{
 .cell.reg {
 	width: 100px;
 }
-.cell.subReg {
+.cell.subreg {
 	width: 150px;
 }
 .cell.pop {
@@ -80,27 +80,61 @@ img{
 .cell.langs {
 	width: 200px;
 }
-@media (max-width: 1090px){
-	.wrapper{
-		grid-template-columns: 1fr 1fr;
+@media (max-width: 1000px){
+	.table { 
+		flex-flow: row wrap;
 	}
-	.row{
-		display: block;
+	.header {
+		display: none;
+	}
+	.row:not(.header) {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
 		padding: 8px;
+		width: 44%;
 		max-height: 100%;
 	}
-	.cell{
+	.row:nth-child(odd) {
+		background-color: initial;
+	}
+	.row:nth-child(4n+2),.row:nth-child(4n+1) {
+		background-color: #e8e8e8;
+	}
+	.cell {
 		display: block;
 		padding: 2px;
 	}
-	.header{
-		display: none;
+	.cell:not(.flag) {
+		width: 100%;
 	}
-	.cell.flag{
-		float: right;
-		display: inline;
-	}
-	.cell.pop{
+	.cell.pop {
 		text-align: left;
+	}
+}
+@media (max-width: 640px) {
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+	}
+	.row:not(.header) {
+		width: 100%;
+		flex-wrap: nowrap;
+	}
+	.row:nth-child(4n+2),.row:nth-child(4n+1) {
+		background-color: initial;
+	}
+	.row:nth-child(odd) {
+		background-color: #e8e8e8;
+	}
+	.cell:not(.flag) {
+		width: 100%;
+	}
+	ul ul{
+		margin-left: -25px;
+	}
+	h1,h2,h3 { 
+		font-size: 1em;
 	}
 }

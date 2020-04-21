@@ -13,22 +13,24 @@
         <form id="searchForm" onsubmit="searchFunction();return false;" method="post">
           <h1>Countries Search</h1>
           <label for="searchText">Search string:</label>
-          <input type="text" id="searchText" name="searchText">
-          <input type="submit" value="Search">
+          <div>
+            <input type="text" id="searchText" name="searchText">
+            <input type="submit" value="Search">
+          </div>
           <div>
             <input type="radio" checked id="name" name="mode" value="name"><label for="name">Name</label>
             <input type="radio" id="fname" name="mode" value="fname"><label for="fname">Full name</label>
             <input type="radio" id="code" name="mode" value="code"><label for="code">Code</label>
           </div>
+        <div id="resultErr"> </div>
          </form>
       </div>
       <div class="result">
-        <h2>Results</h2>
+        <h2 id="hResults" style="visibility: hidden;">Results</h2>
         <div class="table" id="tblResult"></div>
-        <div id="resultErr"> </div>
       </div>
       <div class="summary">
-        <h2>Summary</h2>
+        <h2 id="hSummary" style="visibility: hidden;">Summary</h2>
         <ul id="listSumm">
         </ul>
       </div>

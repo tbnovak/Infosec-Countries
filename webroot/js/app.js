@@ -19,7 +19,7 @@ var resultTableColumns = [
 		title: "Region",
 		makeCell: makeRegionCell},
 	{
-		class: "subReg",
+		class: "subreg",
 		title: "Subregion",
 		makeCell: makeSubregionCell},
 	{
@@ -32,7 +32,7 @@ var resultTableColumns = [
 		makeCell: makeLanguageCell}
 ];
 /**
- *  onLoad handler. Add col and thread elements to the result table.
+ *  onLoad handler. Clear the search field
  */
 function initPage() {
 	//clear search
@@ -51,7 +51,7 @@ function searchFunction() {
 		const mode = document.querySelector("input[name = 'mode']:checked").value;
 		const data = JSON.stringify({"searchString": searchString, "mode": mode});
 	    const xmlhttp = new XMLHttpRequest();
-	    xmlhttp.onreadystatechange = queryStatueChange;
+	    xmlhttp.onreadystatechange = queryStatusChange;
 	    xmlhttp.open("POST", "http://localhost:8765/api/index.php", true);
 	    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    xmlhttp.send("q=" + data);
@@ -64,9 +64,10 @@ function searchFunction() {
 /**
  *  onreadystatechange handler. On success, populate result elements
  */
-function queryStatueChange() {
+function queryStatusChange() {
     if (this.readyState == 4 && this.status == 200) {
 		processResults(this.responseText);
+
     }
 }
 /**
@@ -90,7 +91,7 @@ function processResults(responseText){
 	} catch (err) {
 		setResultErrorString("Error: " + err);
 	}
-
+	showResultsHeader();
 	replaceResultTableBody(newBody);
 	emitSummary(summary);
 }
@@ -118,17 +119,9 @@ function summarizeCountry(summary, country) {
 	summary.total++;
 }
 /**
- * Add a tr element representing the country to the result table.
- * @param{tbody} body
- * @params{object} country
+ *  Make the row for the top of the search result table.
+ *  @return{div}
  */
-function addResultRow(body, country){
-	const row = body.insertRow(body.length);
-	for(let i = 0; i<7; i++){
-		let cell = row.insertCell(i);
-		resultTableColumns[i].callback(cell, country);
-	}
-}
 function makeHeaderRow(){
 	const headRow = document.createElement("div");
 	headRow.classList += "row ";
@@ -136,17 +129,23 @@ function makeHeaderRow(){
 	for (let i = 0; i < resultTableColumns.length; i++){
 		let cell = document.createElement("div");
 		cell.innerHTML = resultTableColumns[i].title;
-		cell.classList += "cell ";
-		cell.classlist += resultTableColumns[i].class + " ";
+		cell.classList += "cell " + resultTableColumns[i].class + " ";
 		headRow.appendChild(cell);
 	}
 	return headRow;
 }
+/**
+ *  Make the row for a single search result.
+ *  @param{Object} country
+ *  @return{div} result row
+ */
 function makeResultRow(country){
 	const row = document.createElement("div");
 	row.classList += "row ";
 	for(let i = 0; i < resultTableColumns.length; i++){
-		row.appendChild(resultTableColumns[i].makeCell(country));
+		let cell = resultTableColumns[i].makeCell(country);
+		cell.classList += "cell " + resultTableColumns[i].class + " ";
+		row.appendChild(cell);
 	}
 	return row;
 }
@@ -159,6 +158,7 @@ function makeResultRow(country){
  */
 function emitSummary(summary) {
 	var sumList = document.createElement("ul");
+	showSummaryHeader();
 	sumList.innerHTML = "Total: " + summary.total;
 	for (let regionName in summary.regions) {
 		let region = summary.regions[regionName];
@@ -169,7 +169,7 @@ function emitSummary(summary) {
 /**
  *  Make the li for a given region.
  *  @param{string} name
- *  @param{object} region. 
+ *  @param{object} region
  *		region.count = number of results in that region.
  *		region.subs[<subregionName>] = number of results in that subregion.
  *  @return{li}
@@ -197,35 +197,31 @@ function makeSubregionLi(name, frequency) {
 }
 /**
  * Given a td element, set HTML for name display.
- * @param{td} cell.
  * @param{object} country 
+ * @return{div} cell
  */
 function makeNameCell(country){
 	var cell = document.createElement("div");
-	cell.classList += "cell ";
 	cell.innerHTML = country.name;
 	return cell;
 }
 /**
  * Given a td element, set HTML for 3code display.
- * @param{td} cell.
  * @param{object} country 
+ * @return{div} cell
  */
 function make3codeCell(country){
 	var cell = document.createElement("div");
-	cell.classList += "cell ";
 	cell.innerHTML = country.alpha3Code;
 	return cell;
 }
 /**
  * Given a td element, set HTML for flag display.
- * @param{td} cell.
  * @param{object} country 
+ * @return{div} cell
  */
 function makeFlagImgCell(country){
 	var cell = document.createElement("div");
-	cell.classList += "cell ";
-	cell.classList += "flag ";
 	const img = document.createElement("img");
 	img.src = country.flag;
 	cell.appendChild(img);
@@ -233,46 +229,41 @@ function makeFlagImgCell(country){
 }
 /**
  * Given a td element, set HTML for population display.
- * @param{td} cell.
  * @param{object} country 
+ * @return{div} cell
  */
 function makeRegionCell(country){
 	var cell = document.createElement("div");
-	cell.classList += "cell ";
 	cell.innerHTML = country.region;
 	return cell;
 }
 /**
  * Given a td element, set HTML for population display.
- * @param{td} cell.
  * @param{object} country 
+ * @return{div} cell
  */
 function makeSubregionCell(country){
 	var cell = document.createElement("div");
-	cell.classList += "cell ";
 	cell.innerHTML = country.subregion;
 	return cell;
 }
 /**
  * Given a td element, set HTML for population display.
- * @param{td} cell.
  * @param{object} country 
+ * @return{div} cell
  */
 function makePopulationCell(country){
 	var cell = document.createElement("div");
-	cell.classList += "cell ";
 	cell.innerHTML = country.population.toLocaleString();
-	cell.classList += "pop ";
 	return cell;
 }
 /**
  * Given a td element, set HTML for language display.
- * @param{td} cell.
  * @param{object} country 
+ * @return{div} cell
  */
 function makeLanguageCell(country){
 	var cell = document.createElement("div");
-	cell.classList += "cell ";
 	cell.innerHTML = languageArrayToString(country.languages);
 	return cell;
 }
@@ -334,6 +325,18 @@ function replaceResultSummaryList(newList){
 	}
 	newList.id = "listSumm";
 	oldSumm.parentNode.replaceChild(newList, oldSumm);
+}
+/**
+ * Show the header for the summary section of the page
+ */
+function showSummaryHeader(){
+	document.getElementById("hSummary").style.visibility = "visible";
+}
+/**
+ * Show the header for the result section of the page
+ */
+function showResultsHeader(){
+	document.getElementById("hResults").style.visibility = "visible";
 }
 //on refresh, don't re-post
 if (window.history.replaceState) {
