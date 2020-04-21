@@ -6,40 +6,55 @@ thead {
 	text-align: left;
 	background-color: #e8e8e8;
 }
-td {
-	padding: 8px;
-}
-tr:nth-child(even) {
+.row:nth-child(odd) {
 	background-color: #f2f2f2;
 }
-col.name {
-	width: 150px;
+.row.header {
+	background-color: #e8e8e8;
+	font-weight: 600;
 }
-col.code {
-	width: 60px;
+.table {
+	display: table;
 }
-col.flag {
-	width: 100px; min-width: 40px;
-}
-col.reg {
-	width: 100px;
-}
-col.subReg {
-	width: 150px;
-}
-col.pop {
-	width: 134px; 
-}
-col.langs {
-	width: 200px;
-}
-td.pop {
-	text-align: right;
-}
-tr {
+.row {
+	display: table-row;
 	max-height: 74px;
 }
-.wrapper{
+.cell {
+	display: table-cell;
+	padding: 8px;
+	vertical-align: middle;
+}
+.cell.name {
+	width: 150px;
+}
+.cell.code {
+	width: 60px;
+}
+.cell.flag {
+	width: 100px; min-width: 40px;
+}
+img{
+	display: block; 
+	width: 100%; 
+	height: auto; 
+	margin-left: auto; 
+	margin-right: auto;
+}
+.cell.reg {
+	width: 100px;
+}
+.cell.subReg {
+	width: 150px;
+}
+.cell.pop {
+	width: 134px; 
+	text-align: right;
+}
+.cell.langs {
+	width: 200px;
+}
+.wrapper {
 	display: grid;
 	grid-template-rows: 150px auto;
 	grid-template-columns: 350px auto;
@@ -47,17 +62,17 @@ tr {
 	height: 100%;
 	position: fixed;
 }
-.form{
+.form {
 	grid-column: 1;
 	grid-row: 1;
 }
-.result{
+.result {
 	grid-column: 2;
 	grid-row: 1/2;
 	overflow-y: scroll;
 	height: 100vh;
 }
-.summary{
+.summary {
 	grid-column: 1;
 	grid-row: 2;
 	position: relative;

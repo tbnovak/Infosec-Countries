@@ -1,36 +1,35 @@
 /**
- * 
- *
+ *  @author Tyler Novak
  */
 var resultTableColumns = [
 	{
 		class: "flag",
 		title: "",
-		callback: addFlagImgCell},
+		makeCell: makeFlagImgCell},
 	{
 		class: "name",
 		title: "Name",
-		callback: addNameCell},
+		makeCell: makeNameCell},
 	{
 		class: "code",
 		title: "Code",
-		callback: add3codeCell},
+		makeCell: make3codeCell},
 	{
 		class: "reg",
 		title: "Region",
-		callback: addRegionCell},
+		makeCell: makeRegionCell},
 	{
 		class: "subReg",
 		title: "Subregion",
-		callback: addSubregionCell},
+		makeCell: makeSubregionCell},
 	{
 		class: "pop",
 		title: "Pop.",
-		callback: addPopulationCell},
+		makeCell: makePopulationCell},
 	{
 		class: "langs",
 		title: "Languages",
-		callback: addLanguageCell}
+		makeCell: makeLanguageCell}
 ];
 /**
  *  onLoad handler. Add col and thread elements to the result table.
@@ -38,14 +37,6 @@ var resultTableColumns = [
 function initPage() {
 	//clear search
 	document.getElementById("searchForm").reset();
-	//build table. Order matters, so I want it in the same file the rows are created
-	const table = document.getElementById("tblResult");
-	const thead = table.createTHead();
-	const hrow = thead.insertRow(0);
-	for (let i=0; i < resultTableColumns.length; i++){
-		appendCol(table).classList += resultTableColumns[i].class;
-		appendHeaderCell(hrow).innerHTML = resultTableColumns[i].title;
-	}
 }
 /**
  *  form submit handler. Parse input, craft ajax, and send query.
@@ -84,21 +75,80 @@ function queryStatueChange() {
  *  @param {string} responsetext. this.responseText from the ajax post. Expected JSON format. Handles null/empty responses
  */
 function processResults(responseText){
-	const newBody = document.createElement("tbody");
-		var summary = {regions: {}, total: 0};
+	const newBody = document.createElement("div");
+	newBody.classList += "table ";
+	var summary = {regions: {}, total: 0};
+	newBody.appendChild(makeHeaderRow());
 	try{
 		if (!responseText || responseText == "") throw "No result";
 		const result = JSON.parse(responseText);
 		if(!result || result.length == 0) throw "No results";
 		for (let country of result) {
-			addResultRow(newBody, country);
+			newBody.appendChild(makeResultRow(country));
 			summarizeCountry(summary, country);
 		}
 	} catch (err) {
 		setResultErrorString("Error: " + err);
 	}
+
 	replaceResultTableBody(newBody);
 	emitSummary(summary);
+}
+/**
+ *  Break apart country object and update the summary tracking object.
+ *  @param{object} summary. I/O.
+ *		summary.total++.
+ *		summary.regions[country.region].count++.
+ *		summary.regions[country.regions].subs[country.subregion]++.
+ *	@param{object} country 
+ */
+function summarizeCountry(summary, country) {
+	const region = (country.region == "" ? "NONE" : country.region);
+	const subreg = (country.subregion == "" ? "NONE" : country.subregion);
+	if(!summary.regions[region]) {
+		summary.regions[region] = {
+			count: 1,
+			subs: {}
+		};
+	} else {
+		summary.regions[region].count++;
+	}
+	const subs = summary.regions[region].subs;
+	subs[subreg] = (subs[subreg] || 0) + 1;
+	summary.total++;
+}
+/**
+ * Add a tr element representing the country to the result table.
+ * @param{tbody} body
+ * @params{object} country
+ */
+function addResultRow(body, country){
+	const row = body.insertRow(body.length);
+	for(let i = 0; i<7; i++){
+		let cell = row.insertCell(i);
+		resultTableColumns[i].callback(cell, country);
+	}
+}
+function makeHeaderRow(){
+	const headRow = document.createElement("div");
+	headRow.classList += "row ";
+	headRow.classList += "header ";
+	for (let i = 0; i < resultTableColumns.length; i++){
+		let cell = document.createElement("div");
+		cell.innerHTML = resultTableColumns[i].title;
+		cell.classList += "cell ";
+		cell.classlist += resultTableColumns[i].class + " ";
+		headRow.appendChild(cell);
+	}
+	return headRow;
+}
+function makeResultRow(country){
+	const row = document.createElement("div");
+	row.classList += "row ";
+	for(let i = 0; i < resultTableColumns.length; i++){
+		row.appendChild(resultTableColumns[i].makeCell(country));
+	}
+	return row;
 }
 /**
  * Convert summary object to nested ul/li elements including (sub)region names and frequencies. Replaces the summary list in the document
@@ -146,99 +196,85 @@ function makeSubregionLi(name, frequency) {
 	return liSub;
 }
 /**
- *  Break apart country object and update the summary tracking object.
- *  @param{object} summary. I/O.
- *		summary.total++.
- *		summary.regions[country.region].count++.
- *		summary.regions[country.regions].subs[country.subregion]++.
- *	@param{object} country 
- */
-function summarizeCountry(summary, country) {
-	const region = (country.region == "" ? "NONE" : country.region);
-	const subreg = (country.subregion == "" ? "NONE" : country.subregion);
-	if(!summary.regions[region]) {
-		summary.regions[region] = {
-			count: 1,
-			subs: {}
-		};
-	} else {
-		summary.regions[region].count++;
-	}
-	const subs = summary.regions[region].subs;
-	subs[subreg] = (subs[subreg] || 0) + 1;
-	summary.total++;
-}
-/**
  * Given a td element, set HTML for name display.
  * @param{td} cell.
  * @param{object} country 
  */
-function addNameCell(cell, country){
+function makeNameCell(country){
+	var cell = document.createElement("div");
+	cell.classList += "cell ";
 	cell.innerHTML = country.name;
+	return cell;
 }
 /**
  * Given a td element, set HTML for 3code display.
  * @param{td} cell.
  * @param{object} country 
  */
-function add3codeCell(cell, country){
+function make3codeCell(country){
+	var cell = document.createElement("div");
+	cell.classList += "cell ";
 	cell.innerHTML = country.alpha3Code;
+	return cell;
 }
 /**
  * Given a td element, set HTML for flag display.
  * @param{td} cell.
  * @param{object} country 
  */
-function addFlagImgCell(cell, country){
+function makeFlagImgCell(country){
+	var cell = document.createElement("div");
+	cell.classList += "cell ";
+	cell.classList += "flag ";
 	const img = document.createElement("img");
 	img.src = country.flag;
-	img.style = "width: 100%; height: auto;";
 	cell.appendChild(img);
+	return cell;
 }
 /**
  * Given a td element, set HTML for population display.
  * @param{td} cell.
  * @param{object} country 
  */
-function addRegionCell(cell, country){
+function makeRegionCell(country){
+	var cell = document.createElement("div");
+	cell.classList += "cell ";
 	cell.innerHTML = country.region;
+	return cell;
 }
 /**
  * Given a td element, set HTML for population display.
  * @param{td} cell.
  * @param{object} country 
  */
-function addSubregionCell(cell, country){
+function makeSubregionCell(country){
+	var cell = document.createElement("div");
+	cell.classList += "cell ";
 	cell.innerHTML = country.subregion;
+	return cell;
 }
 /**
  * Given a td element, set HTML for population display.
  * @param{td} cell.
  * @param{object} country 
  */
-function addPopulationCell(cell, country){
+function makePopulationCell(country){
+	var cell = document.createElement("div");
+	cell.classList += "cell ";
 	cell.innerHTML = country.population.toLocaleString();
-	cell.classList += "pop";
+	cell.classList += "pop ";
+	return cell;
 }
 /**
  * Given a td element, set HTML for language display.
  * @param{td} cell.
  * @param{object} country 
  */
-function addLanguageCell(cell, country){
+function makeLanguageCell(country){
+	var cell = document.createElement("div");
+	cell.classList += "cell ";
 	cell.innerHTML = languageArrayToString(country.languages);
-}
-/**
- * Add a tr element representing the country to the result table.
- * @param{tbody} body
- * @params{object} country
- */
-function addResultRow(body, country){
-	const row = body.insertRow(body.length);
-	for(let i = 0; i<7; i++){
-		let cell = row.insertCell(i);
-		resultTableColumns[i].callback(cell, country);
-	}
+	return cell;
 }
 /**
  * .toString replacement for country.language, since it's not a simple string array
@@ -257,26 +293,6 @@ function languageArrayToString(languageArray){
 	}
 }
 /**
- *  Add a th element to the tr. In lieu of .insertCell which doesn't support th
- *  @param{tr} row
- *  @return{th}
- */
-function appendHeaderCell(row){
-	const cell = document.createElement("th");
-	row.appendChild(cell);
-	return cell;
-}
-/**
- *  Add a col element to the table. appendChild, but typed
- *  @param{table} table element
- *  @return{col}
- */
-function appendCol(table){
-	const col = document.createElement("col");
-	table.appendChild(col);
-	return col;
-}
-/**
  *  Write a user-facing error string to the document
  *  @param{string}
  */
@@ -285,7 +301,7 @@ function setResultErrorString(string){
 	if(resultEl){
 		resultEl.innerHTML = string;
 	} else {
-		alert("Result: " + string);
+		alert(string);
 	}
 }
 /**
@@ -293,17 +309,18 @@ function setResultErrorString(string){
  *  @return{HTMLElement}
  */
 function getResultErrorStringEl(){
-	return document.getElementById("result");
+	return document.getElementById("resultErr");
 }
 /**
  *  Clobber the existing result tbody with a new one
  *  @param{tbody} new/bod
  */
 function replaceResultTableBody(newBod){
-	const oldBody = document.getElementById("tblResult").tBodies[0];
+	const oldBody = document.getElementById("tblResult");
 	if (!newBod) {
-		newBod = document.createElement("tbody");
+		newBod = document.createElement("div");
 	}
+	newBod.id="tblResult";
 	oldBody.parentNode.replaceChild(newBod, oldBody);
 }
 /**
