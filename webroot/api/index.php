@@ -1,7 +1,6 @@
 <?php
 /**
- * This is a template php file for your countries search.
- * Use as you will, or start over. It's up to you.
+ * This is a php endpoint for the countries search.
  */
 function popCmp($a, $b){
 	return $a["population"] < $b["population"];
@@ -20,7 +19,7 @@ function nameSearch($url){
 }
 function queryCountries($searchString, $mode = "") {
 	$fields = "fields=name;alpha2Code;alpha3Code;population;flag;region;subregion;languages;";
-	if ($searchString == "all") {
+	if ($searchString == "searchall") {
 		$url = "https://restcountries.eu/rest/v2/all";
 		$fields .= "altSpellings";
 		return file_get_contents($url . "?" . $fields);
@@ -28,12 +27,13 @@ function queryCountries($searchString, $mode = "") {
 		//search on: country name, full name, or code
 		switch ($mode) {
 			case 'fname':
+				//won't match all 3-codes. eg. "American Samoa" aka "AS" will not be inculded in search on "ASM"
 				$url = "https://restcountries.eu/rest/v2/name/" . $searchString . "?fullText=true";
 				return nameSearch($url . "?" . $fields);
 				break;
 			case 'code':
 				$url = "https://restcountries.eu/rest/v2/alpha?codes=" . $searchString;
-				return nameSearch($url);//."&".$fields);
+				return nameSearch($url . "&" . $fields);
 				break;
 			case 'name':
 			default:
@@ -48,7 +48,9 @@ $obj = json_decode($_POST["q"], false);
 $searchString = $obj->searchString;
 $mode = $obj->mode;
 echo queryCountries($searchString,$mode);
+
 /**
+ * Wa
  * american samoa (4)
  * name: "American Samoa"
  * alpha2: "AS"
