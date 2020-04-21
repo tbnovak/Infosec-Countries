@@ -8,26 +8,34 @@
     <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script-->
   </head>
   <body onload="initPage()">
-    <form id="searchForm" onsubmit="searchFunction();return false;" method="post">
-      <h2>Countries Search</h2>
-      <label for="searchText">Search string:</label>
-      <input type="text" id="searchText" name="searchText">
-      <input type="submit" value="Search">
-      <h3>Search mode</h3>
-      <input type="radio" checked id="name" name="mode" value="name"><label for="name">Name</label>
-      <input type="radio" id="fname" name="mode" value="fname"><label for="fname">Full name</label>
-      <input type="radio" id="code" name="mode" value="code"><label for="code">Code</label>
-      <br>
-    </form>
-    <br>
-    <table id="tblResult">
-      <tbody id="bodyResult">
-      </tbody>
-      <tfoot>
-        <tr><td id="result" colspan="999"></td></tr>
-      </tfoot>
-    </table>
-    <ul id="listSumm">
-    </ul>
+    <div class="wrapper">
+      <div class="form">
+        <form id="searchForm" onsubmit="searchFunction();return false;" method="post">
+          <h1>Countries Search</h1>
+          <label for="searchText">Search string:</label>
+          <input type="text" id="searchText" name="searchText">
+          <input type="submit" value="Search">
+          <input type="radio" checked id="name" name="mode" value="name"><label for="name">Name</label>
+          <input type="radio" id="fname" name="mode" value="fname"><label for="fname">Full name</label>
+          <input type="radio" id="code" name="mode" value="code"><label for="code">Code</label>
+          <br>
+        </form>
+      </div>
+      <div class="result">
+        <h2>Results</h2>
+        <table id="tblResult">
+          <tbody id="bodyResult">
+          </tbody>
+          <tfoot>
+            <tr><td id="result" colspan="999"></td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="summary">
+        <h2>Summary</h2>
+        <ul id="listSumm">
+        </ul>
+      </div>
+    </div>
   </body>
 </html>

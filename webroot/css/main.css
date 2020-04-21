@@ -36,6 +36,30 @@ col.langs {
 td.pop {
 	text-align: right;
 }
-tbody tr {
-	height: 74px;
+tr {
+	max-height: 74px;
+}
+.wrapper{
+	display: grid;
+	grid-template-rows: 150px auto;
+	grid-template-columns: 350px auto;
+	grid-row-gap: 20px;
+	height: 100%;
+	position: fixed;
+}
+.form{
+	grid-column: 1;
+	grid-row: 1;
+}
+.result{
+	grid-column: 2;
+	grid-row: 1/2;
+	overflow-y: scroll;
+	height: 100vh;
+}
+.summary{
+	grid-column: 1;
+	grid-row: 2;
+	position: relative;
+	overflow-y: scroll;
 }
