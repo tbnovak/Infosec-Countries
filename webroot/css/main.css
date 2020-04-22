@@ -10,9 +10,6 @@
 	grid-column: 1;
 	grid-row: 1;
 }
-input[type=text] {
-	width: 
-}
 .summary {
 	grid-column: 1;
 	grid-row: 2;
@@ -45,10 +42,10 @@ input[type=text] {
 	padding: 8px;
 }
 .cell.name {
-	width: 150px;
+	width: 150%;
 }
 .cell.code {
-	width: 60px;
+	width: 60%;
 }
 .cell.flag {
 	min-width: 40px;
@@ -67,17 +64,17 @@ img {
 	margin-right: auto;
 }
 .cell.reg {
-	width: 100px;
+	width: 100%;
 }
 .cell.subreg {
-	width: 150px;
+	width: 150%;
 }
 .cell.pop {
-	width: 134px; 
+	width: 134%; 
 	text-align: right;
 }
 .cell.langs {
-	width: 200px;
+	width: 200%;
 }
 @media (max-width: 1000px){
 	.table { 

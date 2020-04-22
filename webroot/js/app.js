@@ -80,6 +80,7 @@ function queryStatusChange() {
 function processResults(responseText){
 	const newBody = document.createElement("div");
 	newBody.classList += "table ";
+	newBody.setAttribute("role", "table");
 	var summary = {regions: {}, total: 0};
 	newBody.appendChild(makeHeaderRow());
 	try{
@@ -128,10 +129,12 @@ function makeHeaderRow(){
 	const headRow = document.createElement("div");
 	headRow.classList += "row ";
 	headRow.classList += "header ";
+	headRow.setAttribute("role", "row");
 	for (let i = 0; i < resultTableColumns.length; i++){
-		let cell = document.createElement("div");
+		let cell = document.createElement("span");
 		cell.innerHTML = resultTableColumns[i].title;
 		cell.classList += "cell " + resultTableColumns[i].class + " ";
+		cell.setAttribute("role", "columnheader");
 		headRow.appendChild(cell);
 	}
 	return headRow;
@@ -143,10 +146,12 @@ function makeHeaderRow(){
  */
 function makeResultRow(country){
 	const row = document.createElement("div");
+	row.setAttribute("role", "row");
 	row.classList += "row ";
 	for(let i = 0; i < resultTableColumns.length; i++){
 		let cell = resultTableColumns[i].makeCell(country);
 		cell.classList += "cell " + resultTableColumns[i].class + " ";
+		cell.setAttribute("role", "cell");
 		row.appendChild(cell);
 	}
 	return row;
@@ -203,9 +208,8 @@ function makeSubregionLi(name, frequency) {
  * @return{div} cell
  */
 function makeNameCell(country){
-	var cell = document.createElement("div");
+	var cell = document.createElement("span");
 	cell.innerHTML = country.name;
-	cell.value = "Name";
 	return cell;
 }
 /**
@@ -214,7 +218,7 @@ function makeNameCell(country){
  * @return{div} cell
  */
 function make3codeCell(country){
-	var cell = document.createElement("div");
+	var cell = document.createElement("span");
 	cell.innerHTML = country.alpha3Code;
 	return cell;
 }
@@ -224,9 +228,10 @@ function make3codeCell(country){
  * @return{div} cell
  */
 function makeFlagImgCell(country){
-	var cell = document.createElement("div");
+	var cell = document.createElement("span");
 	const img = document.createElement("img");
 	img.src = country.flag;
+	img.alt = "";
 	cell.appendChild(img);
 	return cell;
 }
@@ -236,7 +241,7 @@ function makeFlagImgCell(country){
  * @return{div} cell
  */
 function makeRegionCell(country){
-	var cell = document.createElement("div");
+	var cell = document.createElement("span");
 	cell.innerHTML = country.region;
 	return cell;
 }
@@ -246,7 +251,7 @@ function makeRegionCell(country){
  * @return{div} cell
  */
 function makeSubregionCell(country){
-	var cell = document.createElement("div");
+	var cell = document.createElement("span");
 	cell.innerHTML = country.subregion;
 	return cell;
 }
@@ -256,7 +261,7 @@ function makeSubregionCell(country){
  * @return{div} cell
  */
 function makePopulationCell(country){
-	var cell = document.createElement("div");
+	var cell = document.createElement("span");
 	cell.innerHTML = country.population.toLocaleString();
 	return cell;
 }
@@ -266,7 +271,7 @@ function makePopulationCell(country){
  * @return{div} cell
  */
 function makeLanguageCell(country){
-	var cell = document.createElement("div");
+	var cell = document.createElement("span");
 	cell.innerHTML = languageArrayToString(country.languages);
 	return cell;
 }
