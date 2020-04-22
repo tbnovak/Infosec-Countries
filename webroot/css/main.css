@@ -17,13 +17,13 @@ input[type=text] {
 	grid-column: 1;
 	grid-row: 2;
 	position: relative;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 .result {
 	grid-column: 2;
 	grid-row: 1/2;
-	overflow-y: scroll;
 	height: 100vh;
+	overflow-y: auto;
 }
 .table {
 	display: flex;
