@@ -81,6 +81,7 @@ function processResults(responseText){
 	const newBody = document.createElement("div");
 	newBody.classList += "table ";
 	newBody.setAttribute("role", "table");
+	newBody.setAttribute("aria-label", "Results");
 	var summary = {regions: {}, total: 0};
 	newBody.appendChild(makeHeaderRow());
 	try{
