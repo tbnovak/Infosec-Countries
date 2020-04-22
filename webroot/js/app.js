@@ -36,7 +36,9 @@ var resultTableColumns = [
  */
 function initPage() {
 	//clear search
-	document.getElementById("searchForm").reset();
+	var input = document.getElementById("searchText");
+	input.value = "";
+	input.focus();
 }
 /**
  *  form submit handler. Parse input, craft ajax, and send query.
@@ -203,6 +205,7 @@ function makeSubregionLi(name, frequency) {
 function makeNameCell(country){
 	var cell = document.createElement("div");
 	cell.innerHTML = country.name;
+	cell.value = "Name";
 	return cell;
 }
 /**
